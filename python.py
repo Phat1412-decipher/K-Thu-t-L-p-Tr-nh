@@ -45,29 +45,35 @@ Data=[]
 Token=[]
 while Per_var:
     Answer= input("Bạn muốn làm gì ? (1: Thêm bài hát, 2: Xóa bài hát, 3: Xóa toàn bộ file, 4: Tìm kiếm bài hát, 5: Thoát chương trình ,6: Hiển thị danh sách bài hát) ")
+    if Answer not in ["1","2","3","4","5","6"]:
+        print("Vui lòng nhập một lựa chọn hợp lệ!")
+        continue
     if Answer == "1":
-        try:
-            
-            while True:
+        while True:
+            try:
+                
+                
                 Number = int(input("Nhập số lượng bài hát muốn thêm: "))
                 if Number > 0:
                     break
                 print("Vui lòng nhập một số dương!")
-        except ValueError:
-            print("Vui lòng nhập một số hợp lệ!")
-            
+            except ValueError:
+                print("Vui lòng nhập một số hợp lệ!")
+                
         for i in range(Number):
             Songname = input("Nhập tên bài hát: ").strip()
             artist = input("Nhập tên tác giả: ").strip()
             type = input("Nhập thể loại: ").strip()
             try:
+                
                 time = input("Nhập thời lượng (định dạng mm:ss): ").strip()
                 minutes, seconds = map(int, time.split(':'))
                 if minutes < 0 or seconds < 0 or seconds >= 60:
                     raise ValueError
+                    
             except ValueError:
                 print("Định dạng thời lượng không hợp lệ! Vui lòng nhập theo định dạng mm:ss.")
-                
+                continue
             Songname = Songname.upper()
             Token.append(Playlist(Songname,artist,type,time))
         Token=Classification(Data, Token)
