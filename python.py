@@ -14,7 +14,7 @@ def Search(Data, Token,left, right ,Draft=1):
         return "Not Found"
     if Data[Mid].Songname == Token:
         if Draft == 1:
-            return Data[Mid].Songname + " - " + Data[Mid].fullname + " - " + Data[Mid].type + " - " + Data[Mid].time
+            return f"Tên bài hát: {Data[Mid].Songname} - Tên tác giả: {Data[Mid].fullname} - Thể loại: {Data[Mid].type} - Thời lượng: {Data[Mid].time}"
         if Draft == 2:
             return Mid
     if Data[Mid].Songname > Token:
@@ -25,7 +25,7 @@ def Search(Data, Token,left, right ,Draft=1):
 def Extend_file(Token):
     with open("playlist.txt", "a") as file:
         for i in range(len(Token)):
-            file.write(f"Ten bai hat: {Token[i].Songname} - Ten tac gia: {Token[i].fullname} - Loai: {Token[i].type} - Thoi luong: {Token[i].time}\n")
+            file.write(f"Tên bài hát: {Token[i].Songname} - Tên tác giả: {Token[i].fullname} - Thể loại: {Token[i].type} - Thời lượng: {Token[i].time}\n")
     Token.clear()
 
 def Delete_item(Data, Token):
@@ -46,7 +46,16 @@ Token=[]
 while Per_var:
     Answer= input("Bạn muốn làm gì ? (1: Thêm bài hát, 2: Xóa bài hát, 3: Xóa toàn bộ file, 4: Tìm kiếm bài hát, 5: Thoát chương trình ,6: Hiển thị danh sách bài hát) ")
     if Answer == "1":
-        Number = int(input("Nhập số lượng bài hát muốn thêm: "))
+        try:
+            
+            while True:
+                Number = int(input("Nhập số lượng bài hát muốn thêm: "))
+                if Number > 0:
+                    break
+                print("Vui lòng nhập một số dương!")
+        except ValueError:
+            print("Vui lòng nhập một số hợp lệ!")
+            continue
         for i in range(Number):
             Songname = input("Nhập tên bài hát: ")
             artist = input("Nhập tên tác giả: ")
@@ -63,6 +72,7 @@ while Per_var:
         Delete_item(Data, Songname)
     if Answer == "3":
         Delete_total_file()
+        print("Deleted !")
     if Answer == "4":
         Songname = input("Nhập tên bài hát cần tìm kiếm: ")
         Songname = Songname.upper()
