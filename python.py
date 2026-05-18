@@ -55,26 +55,33 @@ while Per_var:
                 print("Vui lòng nhập một số dương!")
         except ValueError:
             print("Vui lòng nhập một số hợp lệ!")
-            continue
+            
         for i in range(Number):
-            Songname = input("Nhập tên bài hát: ")
-            artist = input("Nhập tên tác giả: ")
-            type = input("Nhập thể loại: ")
-            time = input("Nhập thời lượng: ")
+            Songname = input("Nhập tên bài hát: ").strip()
+            artist = input("Nhập tên tác giả: ").strip()
+            type = input("Nhập thể loại: ").strip()
+            try:
+                time = input("Nhập thời lượng (định dạng mm:ss): ").strip()
+                minutes, seconds = map(int, time.split(':'))
+                if minutes < 0 or seconds < 0 or seconds >= 60:
+                    raise ValueError
+            except ValueError:
+                print("Định dạng thời lượng không hợp lệ! Vui lòng nhập theo định dạng mm:ss.")
+                
             Songname = Songname.upper()
             Token.append(Playlist(Songname,artist,type,time))
         Token=Classification(Data, Token)
         Extend_file(Token)
         print("Added !")
     if Answer == "2":
-        Songname = input("Nhập tên bài hát cần xóa: ")
+        Songname = input("Nhập tên bài hát cần xóa: ").strip()
         Songname = Songname.upper()
         Delete_item(Data, Songname)
     if Answer == "3":
         Delete_total_file()
         print("Deleted !")
     if Answer == "4":
-        Songname = input("Nhập tên bài hát cần tìm kiếm: ")
+        Songname = input("Nhập tên bài hát cần tìm kiếm: ").strip()
         Songname = Songname.upper()
         print(Search(Data, Songname, 0, len(Data) - 1))
     if Answer == "5":
