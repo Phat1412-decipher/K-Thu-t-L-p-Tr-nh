@@ -35,6 +35,9 @@ def Delete_item(Data, Token):
     else:
         del Data[Search_result]
         print("Deleted !")
+    with open("playlist.txt", "w", encoding="utf-8") as file:
+        for i in range(len(Data)):
+            file.write(f"Tên bài hát: {Data[i].Songname} - Tên tác giả: {Data[i].fullname} - Thể loại: {Data[i].type} - Thời lượng: {Data[i].time}\n")
 
 def Delete_total_file():
     with open("playlist.txt", "w", encoding="utf-8") as file:
@@ -68,6 +71,7 @@ else:
     Most_Searched=[0]*len(Data)    
 Token=[]
 while Per_var:
+    print("-"*50)
     print(f"Hiện tại có {len(Data)} bài hát trong playlist !")
     if max(Most_Searched) != 0:
         print(f"Bài hát được tìm kiếm nhiều nhất là: {Data[Most_Searched.index(max(Most_Searched))].Songname} với {max(Most_Searched)} lượt tìm kiếm !")
