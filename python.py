@@ -7,7 +7,7 @@ class Playlist:
 def Classification(Data, Token):
     Data.extend(Token)
     Data.sort(key=lambda x: x.Songname)
-    return sorted(Token, key=lambda x: x.Songname)
+    
 def Search(Data, Token,left, right ,Draft=1):
     Mid = (left + right) // 2
     if left > right:
@@ -23,10 +23,10 @@ def Search(Data, Token,left, right ,Draft=1):
         return Search(Data, Token, Mid + 1, right)
 
 def Extend_file(Token):
-    with open("playlist.txt", "a", encoding="utf-8") as file:
+    with open("playlist.txt", "w", encoding="utf-8") as file:
         for i in range(len(Token)):
             file.write(f"Tên bài hát: {Token[i].Songname} - Tên tác giả: {Token[i].fullname} - Thể loại: {Token[i].type} - Thời lượng: {Token[i].time}\n")
-    Token.clear()
+    
 
 def Delete_item(Data, Token):
     Search_result = Search(Data, Token, 0, len(Data) - 1,2)   
@@ -123,27 +123,28 @@ while Per_var:
                     continue
             Songname = Songname.upper()
             Token.append(Playlist(Songname,artist,type,time))
-        Token=Classification(Data, Token)
-        Extend_file(Token)
+        Classification(Data, Token)
+        Extend_file(Data)
         print("Added !")
+        Token.clear()
     if Answer == "2":
         Songname = input("Nhập tên bài hát cần xóa: ").strip()
         Songname = Songname.upper()
         Delete_item(Data, Songname)
     if Answer == "3":
         Delete_total_file()
+        Data.clear()
         print("Deleted !")
     if Answer == "4":
         Songname = input("Nhập tên bài hát cần tìm kiếm: ").strip()
         Songname = Songname.upper()
         Output=Search(Data, Songname, 0, len(Data) - 1)
-        print(Output[0])
-        Most_Searched[Output[1]]+=1
+        if len(Output)==2:
+            print(Output[0])
+            Most_Searched[Output[1]]+=1
     if Answer == "5":
         Per_var = False
         print("Goodbye ! no see you later !")
     if Answer == "6":
         with open("playlist.txt", "r", encoding="utf-8") as file:
             print(file.read())
-
-
