@@ -4,9 +4,19 @@ class Playlist:
         self.fullname= artist
         self.type = type
         self.time = time
-def Classification(Data, Token):
+def Classification(Data, Token, Most_Searched):
     Data.extend(Token)
     Data.sort(key=lambda x: x.Songname)
+    if len(Most_Searched) == 0:
+        Most_Searched.extend([0]*len(Token))
+    else:
+        i=0
+        for j in range(len(Data)):
+            if Data[j].Songname == Token[i].Songname:
+                Most_Searched.insert(j,0)
+                i+=1
+            if i == len(Token):
+                break
     
 def Search(Data, Token,left, right ,Draft=1):
     Mid = (left + right) // 2
@@ -28,12 +38,13 @@ def Extend_file(Token):
             file.write(f"Tên bài hát: {Token[i].Songname} - Tên tác giả: {Token[i].fullname} - Thể loại: {Token[i].type} - Thời lượng: {Token[i].time}\n")
     
 
-def Delete_item(Data, Token):
+def Delete_item(Data, Token, Most_Searched):
     Search_result = Search(Data, Token, 0, len(Data) - 1,2)   
     if Search_result == "Not Found":
         print("Not Found to delete !")
     else:
         del Data[Search_result]
+        del Most_Searched[Search_result]
         print("Deleted !")
     with open("playlist.txt", "w", encoding="utf-8") as file:
         for i in range(len(Data)):
@@ -73,7 +84,10 @@ Token=[]
 while Per_var:
     print("-"*50)
     print(f"Hiện tại có {len(Data)} bài hát trong playlist !")
-    if max(Most_Searched) != 0:
+    if len(Data) == 0:
+        
+        print("Chưa có bài hát nào trong playlist để tìm kiếm !")
+    elif max(Most_Searched) != 0:
         print(f"Bài hát được tìm kiếm nhiều nhất là: {Data[Most_Searched.index(max(Most_Searched))].Songname} với {max(Most_Searched)} lượt tìm kiếm !")
     else:
         print("Chưa có bài hát nào được tìm kiếm !")
@@ -123,17 +137,18 @@ while Per_var:
                     continue
             Songname = Songname.upper()
             Token.append(Playlist(Songname,artist,type,time))
-        Classification(Data, Token)
+        Classification(Data, Token, Most_Searched)
         Extend_file(Data)
         print("Added !")
         Token.clear()
     if Answer == "2":
         Songname = input("Nhập tên bài hát cần xóa: ").strip()
         Songname = Songname.upper()
-        Delete_item(Data, Songname)
+        Delete_item(Data, Songname, Most_Searched)
     if Answer == "3":
         Delete_total_file()
         Data.clear()
+        Most_Searched.clear()
         print("Deleted !")
     if Answer == "4":
         Songname = input("Nhập tên bài hát cần tìm kiếm: ").strip()
